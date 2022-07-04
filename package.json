@@ -1,0 +1,28 @@
+{
+  "name": "battleship",
+  "version": "1.0.0",
+  "description": "The classic game ‘Battleship’, made with TDD in JavaScript, using Jest as test runner",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "watch": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ascodeasice/battleship.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ascodeasice/battleship/issues"
+  },
+  "homepage": "https://github.com/ascodeasice/battleship#readme",
+  "devDependencies": {
+    "css-loader": "^6.7.1",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0"
+  }
+}
