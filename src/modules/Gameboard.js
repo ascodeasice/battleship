@@ -35,8 +35,8 @@ const Gameboard = (size) => {
   };
 
   const hasShip = (row, col) => {
-    if (row < 0 || row > size || col < 0 || col > size) {
-      throw new Error('Out of index');
+    if (row < 0 || row >= size || col < 0 || col >= size) {
+      return true;// Out of index
     }
     return shipData[row][col].shipIndex !== -1;
   };
@@ -47,19 +47,20 @@ const Gameboard = (size) => {
       throw new Error('Can\' t place ship, invalid ship length');
     }
 
-    // all of needed blocks are available
     for (let i = 0; i < len; i += 1) {
       if (hasShip(row + i, col) || row + i >= size) {
-        throw new Error('Can\' t place ship');
+        return false;
       }
     }
 
+    // all of needed blocks are available
     for (let i = 0; i < len; i += 1) {
       shipData[row + i][col].shipIndex = shipArr.length;// new ship
       shipData[row + i][col].shipPos = i;
     }
 
     shipArr.push(Ship(len));
+    return true;
   };
 
   // row, col+len
@@ -68,19 +69,20 @@ const Gameboard = (size) => {
       throw new Error('Can\' t place ship, invalid ship length');
     }
 
-    // all of needed blocks are available
     for (let i = 0; i < len; i += 1) {
-      if (hasShip(row + i, col) || row + i >= size) {
-        throw new Error('Can\' t place ship');
+      if (hasShip(row, col + i) || col + i >= size) {
+        return false;
       }
     }
 
+    // all of needed blocks are available
     for (let i = 0; i < len; i += 1) {
       shipData[row][col + i].shipIndex = shipArr.length;// new ship
       shipData[row][col + i].shipPos = i;
     }
 
     shipArr.push(Ship(len));
+    return true;
   };
 
   const receiveAttack = (row, col) => {

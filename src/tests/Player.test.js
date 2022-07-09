@@ -44,3 +44,20 @@ describe('randomAttack', () => {
   });
   // prevent attack the same block
 });
+
+describe('lost', () => {
+  it('Didn\'t', () => {
+    player.board.placeShipHorizontally(1, 0, 0);
+    expect(player.lost()).toBe(false);
+  });
+
+  it('Did', () => {
+    player.board.placeShipHorizontally(1, 0, 0);
+    computer.attack(player.board, 0, 0);
+    expect(player.lost()).toBe(true);
+  });
+
+  it('No ship', () => {
+    expect(() => player.lost()).toThrow();
+  });
+});

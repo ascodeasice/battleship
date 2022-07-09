@@ -48,11 +48,11 @@ describe('placeShipVertically', () => {
 
   it('Already has ship', () => {
     board.placeShipVertically(3, 0, 0);
-    expect(() => board.placeShipVertically(1, 1, 0)).toThrow();
+    expect(board.placeShipVertically(1, 1, 0)).toBe(false);
   });
 
   it('Out of board', () => {
-    expect(() => board.placeShipVertically(3, 3, 0)).toThrow();
+    expect(board.placeShipVertically(3, 3, 0)).toBe(false);
   });
 });
 
@@ -73,11 +73,11 @@ describe('placeShipHorizontally', () => {
 
   it('Already has ship', () => {
     board.placeShipHorizontally(3, 0, 0);
-    expect(() => board.placeShipHorizontally(1, 0, 2)).toThrow();
+    expect(board.placeShipHorizontally(1, 0, 2)).toBe(false);
   });
 
   it('Out of board', () => {
-    expect(() => board.placeShipHorizontally(3, 0, 3)).toThrow();
+    expect(board.placeShipHorizontally(3, 0, 3)).toBe(false);
   });
 });
 

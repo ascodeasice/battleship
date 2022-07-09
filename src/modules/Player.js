@@ -1,9 +1,5 @@
 import Gameboard from './Gameboard';
-
-function randomInt(min, max) {
-  return Math.floor(Math.random() * (max - min) + min);
-  // The maximum is exclusive and the minimum is inclusive
-}
+import randomInt from './functions';
 
 const Player = (name, size) => {
   const board = Gameboard(size);
@@ -21,8 +17,7 @@ const Player = (name, size) => {
 
   // NOTE move for computer, maybe player can also use it?
   const randomAttack = (enemyBoard) => {
-    // let i = -1;
-    // let j = -1;
+    // prevent duplication
     const validCoords = [];
     for (let i = 0; i < enemyBoard.size; i += 1) {
       for (let j = 0; j < enemyBoard.size; j += 1) {
@@ -32,15 +27,20 @@ const Player = (name, size) => {
       }
     }
 
+    // nothing to attack
     if (validCoords.length === 0) {
       throw new Error('No blocks to attack');
     }
 
     const coords = validCoords[randomInt(0, validCoords.length)];
-
     enemyBoard.receiveAttack(coords[0], coords[1]);
+  };
 
-    // prevent duplication
+  const lost = () => {
+    if (board.shipArr.length === 0) {
+      throw new Error('No ship in shipArr');
+    }
+    return board.shipArr.every((ship) => ship.isSunk());
   };
 
   return {
@@ -48,6 +48,7 @@ const Player = (name, size) => {
     board,
     attack,
     randomAttack,
+    lost,
   };
 };
 
