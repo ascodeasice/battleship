@@ -94,6 +94,7 @@ const Gameboard = (size) => {
   };
 
   return {
+    size,
     shipData,
     isHitData,
     shipArr,

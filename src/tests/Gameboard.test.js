@@ -1,4 +1,3 @@
-import { expect } from 'expect';
 import Gameboard from '../modules/Gameboard';
 
 let board = Gameboard(5);
@@ -11,6 +10,8 @@ beforeEach(() => {
 
 describe('Gameboard', () => {
   it('Gameboard constructor', () => {
+    expect(board.size).toBe(len);
+
     for (let i = 0; i < len; i += 1) {
       for (let j = 0; j < len; j += 1) {
         expect(board.isHitData[i][j]).toBe(false);
