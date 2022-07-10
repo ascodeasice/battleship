@@ -1,0 +1,41 @@
+:root {
+  --blockSize: 40px;
+  --gapSize: 10px;
+  --boardSize: 10;
+}
+
+.block {
+  height: var(--blockSize);
+  width: var(--blockSize);
+  background-color: blue;
+}
+
+.block.attacked {
+  background-color: red;
+}
+
+.block.attacked.ship {
+  background-color: gray;
+}
+
+.board {
+  width: calc(var(--boardSize)*var(--boardSize));
+  height: calc(var(--boardSize)*var(--boardSize));
+  display: grid;
+  grid-template-columns: repeat(10, min-content);
+  grid-auto-rows: min-content;
+  gap: var(--gapSize);
+  border: var(--gapSize) solid black;
+  background-color: black;
+}
+
+.boardWrapper {
+  display: grid;
+  grid-template-rows: min-content min-content;
+}
+
+#container {
+  display: grid;
+  grid-template-columns: repeat(2, min-content);
+  justify-content: space-evenly;
+}

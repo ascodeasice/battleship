@@ -100,6 +100,7 @@ const Gameboard = (size) => {
     shipData,
     isHitData,
     shipArr,
+    hasShip,
     receiveAttack,
     isHit,
     placeShipVertically,

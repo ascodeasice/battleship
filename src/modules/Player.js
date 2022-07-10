@@ -1,5 +1,5 @@
 import Gameboard from './Gameboard';
-import randomInt from './functions';
+import { randomInt } from './functions';
 
 const Player = (name, size) => {
   const board = Gameboard(size);
@@ -27,7 +27,7 @@ const Player = (name, size) => {
       }
     }
 
-    // nothing to attack
+    // nothing to attacawait new Promise(r => setTimeout(r, 2000));//TODO remove thisk
     if (validCoords.length === 0) {
       throw new Error('No blocks to attack');
     }

@@ -3,4 +3,5 @@ function randomInt(min, max) {
   // The maximum is exclusive and the minimum is inclusive
 }
 
-export default randomInt;
+// eslint-disable-next-line import/prefer-default-export
+export { randomInt };

@@ -1,5 +1,6 @@
 import Player from './Player';
-import randomInt from './functions';
+import { randomInt } from './functions';
+import { renderBoard, clearPage, showWinner } from './DOM';
 
 const placeShipRandomly = (board) => {
   const shipLengths = [5, 4, 3, 3, 2];
@@ -20,14 +21,27 @@ const placeShipRandomly = (board) => {
 };
 
 const gameLoop = () => {
-  const player = Player('Testing', 10);
+  const player = Player('Player', 10);
   const computer = Player('Computer', 10);
-  // TODO Player place ships
+
+  // TODO Let Player place ships
   placeShipRandomly(player.board);
   placeShipRandomly(computer.board);
+  renderBoard(player);
+  renderBoard(computer);
+
   while (!player.lost() && !computer.lost()) {
-    player.randomAttack(computer.board);
+    player.randomAttack(computer.board);// TODO wait for player move
     computer.randomAttack(player.board);
+    clearPage();
+    renderBoard(player); // NOTE must re-render every time computer moves
+    renderBoard(computer);
+  }
+
+  if (player.lost()) {
+    showWinner(computer);
+  } else {
+    showWinner(player);
   }
 };
 
