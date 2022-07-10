@@ -1,4 +1,5 @@
 import Ship from './Ship';
+import { randomInt } from './functions';
 
 const Gameboard = (size) => {
   const isHitData = [];
@@ -95,6 +96,24 @@ const Gameboard = (size) => {
     shipArr[data.shipIndex].hit(data.shipPos);
   };
 
+  const placeShipsRandomly = () => {
+    const shipLengths = [5, 4, 3, 3, 2];
+    shipLengths.forEach((len) => {
+      while (true) {
+        const howToPlace = randomInt(0, 2);
+        const coords = [randomInt(0, size), randomInt(0, size)];
+
+        if (howToPlace === 0) {
+          if (placeShipHorizontally(len, coords[0], coords[1])) {
+            break;
+          }
+        } else if (placeShipVertically(len, coords[0], coords[1])) {
+          break;
+        }
+      }
+    });
+  };
+
   return {
     size,
     shipData,
@@ -105,6 +124,7 @@ const Gameboard = (size) => {
     isHit,
     placeShipVertically,
     placeShipHorizontally,
+    placeShipsRandomly,
   };
 };
 
