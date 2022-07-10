@@ -10,12 +10,23 @@
   background-color: white;
 }
 
+.block.computer:hover:not(.attacked) {
+  background-color: lightblue;
+}
+
+.block.computer.attacked {
+  cursor: not-allowed;
+}
+
 .block.attacked {
   background-color: blue;
 }
 
 .block.attacked.ship {
-  background-color: red !important;
+  background: url('./assets/cross.svg');
+  background-repeat: no-repeat;
+  background-size: var(--blockSize) var(--blockSize);
+  background-color: gray;
 }
 
 .block.ship:not(.computer) {

@@ -72,7 +72,6 @@ function renderComputerBoard(player, computer) {
       boardDOM.appendChild(block);
     }
   }
-
   const wrapper = document.createElement('div');
   wrapper.classList.add('boardWrapper');
   wrapper.appendChild(playerName);
