@@ -21,6 +21,7 @@ const Gameboard = (size) => {
         shipIndex: -1,
         // position of ship
         shipPos: -1,
+        direction: 'none',
       });
     }
     shipData.push(row);
@@ -58,6 +59,7 @@ const Gameboard = (size) => {
     for (let i = 0; i < len; i += 1) {
       shipData[row + i][col].shipIndex = shipArr.length;// new ship
       shipData[row + i][col].shipPos = i;
+      shipData[row + i][col].direction = 'vertical';
     }
 
     shipArr.push(Ship(len));
@@ -80,6 +82,7 @@ const Gameboard = (size) => {
     for (let i = 0; i < len; i += 1) {
       shipData[row][col + i].shipIndex = shipArr.length;// new ship
       shipData[row][col + i].shipPos = i;
+      shipData[row][col + i].direction = 'horizontal';
     }
 
     shipArr.push(Ship(len));

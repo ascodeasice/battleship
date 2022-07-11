@@ -4,6 +4,16 @@
   --boardSize: 10;
 }
 
+[draggable="true"] {
+  /*
+   To prevent user selecting inside the drag source
+  */
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
 .block {
   height: var(--blockSize);
   width: var(--blockSize);
@@ -37,8 +47,8 @@
   width: calc(var(--boardSize)*var(--boardSize));
   height: calc(var(--boardSize)*var(--boardSize));
   display: grid;
-  grid-template-columns: repeat(10, min-content);
-  grid-auto-rows: min-content;
+  grid-template-columns: repeat(10, var(--blockSize));
+  grid-auto-rows: var(--blockSize);
   gap: var(--gapSize);
   border: var(--gapSize) solid black;
   background-color: black;
@@ -53,4 +63,11 @@
   display: grid;
   grid-template-columns: repeat(2, min-content);
   justify-content: space-evenly;
+}
+
+.shipContainer {
+  background-color: black;
+  display: grid;
+  gap: var(--gapSize);
+  grid-auto-columns: var(--blockSize);
 }

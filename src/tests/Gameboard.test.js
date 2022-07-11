@@ -23,6 +23,7 @@ describe('Gameboard', () => {
         expect(board.shipData[i][j]).toEqual({
           shipIndex: -1,
           shipPos: -1,
+          direction: 'none',
         });
       }
     }
@@ -38,6 +39,7 @@ describe('placeShipVertically', () => {
       expect(board.shipData[i][0]).toEqual({
         shipIndex: 0,
         shipPos: i,
+        direction: 'vertical',
       });
     }
   });
@@ -63,6 +65,7 @@ describe('placeShipHorizontally', () => {
       expect(board.shipData[0][i]).toEqual({
         shipIndex: 0,
         shipPos: i,
+        direction: 'horizontal',
       });
     }
   });

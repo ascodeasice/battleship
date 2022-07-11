@@ -10,7 +10,11 @@
   "parserOptions": {
     "ecmaVersion": "latest"
   },
-  "rules": {},
+  "rules": {
+    "no-param-reassign": "off",
+    "no-plusplus": "off",
+    "no-continue": "off"
+  },
   "overrides": [
     {
       "files": [
