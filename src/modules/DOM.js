@@ -19,53 +19,68 @@ function cancelDefault(e) {
   return false;
 }
 
-function renderShipContainer(board, boardDOM) {
-  // SECTION find horizontal ships
+function renderHorizontalShips(board, boardDOM) {
   for (let i = 0; i < board.size; i++) {
     for (let j = 0; j < board.size; j++) {
       const shipContainer = document.createElement('div');
+      shipContainer.setAttribute('draggable', 'true');
       shipContainer.classList.add('shipContainer');
-      if (board.hasShip(i, j)) {
+
+      if (board.hasShip(i, j) && board.shipData[i][j].direction === 'horizontal') {
         const len = board.shipArr[board.shipData[i][j].shipIndex].length;
+
         shipContainer.style.gridRow = `${i + 1}/${i + 2}`;
         shipContainer.style.gridColumn = `${j + 1}/${j + 1 + len}`;
         shipContainer.style.gridTemplateColumns = `repeat(${len}, var(--blockSize))`;
-      }
-      while (j < board.size && board.hasShip(i, j) && board.shipData[i][j].direction === 'horizontal') {
-        const block = document.createElement('div');
-        block.classList.add('block');
-        block.classList.add('ship');
-        if (board.isHit(i, j)) block.classList.add('attacked');
-        shipContainer.appendChild(block);
-        j++;
-      }
-      if (shipContainer.childElementCount !== 0) {
+
+        for (let time = 0; time < len; time++) {
+          const block = document.createElement('div');
+          block.classList.add('block');
+          block.classList.add('ship');
+          if (board.isHit(i, j + time)) block.classList.add('attacked');
+
+          shipContainer.appendChild(block);
+        }
+
         boardDOM.appendChild(shipContainer);
+        j += (len - 1);
       }
     }
   }
+}
 
-  // SECTION find vertical ships
+function renderVerticalShips(board, boardDOM) {
   for (let j = 0; j < board.size; j++) {
     for (let i = 0; i < board.size; i++) {
       const shipContainer = document.createElement('div');
+      shipContainer.setAttribute('draggable', 'true');
       shipContainer.classList.add('shipContainer');
-      if (board.hasShip(i, j)) {
-        shipContainer.style.gridRow = `${i + 1}/${i + board.shipArr[board.shipData[i][j].shipIndex].length + 1}`;
+
+      if (board.hasShip(i, j) && board.shipData[i][j].direction === 'vertical') {
+        const len = board.shipArr[board.shipData[i][j].shipIndex].length;
+
+        shipContainer.style.gridRow = `${i + 1}/${i + 1 + len}`;
         shipContainer.style.gridColumn = `${j + 1}/${j + 2}`;
-      }
-      while (i < board.size && board.hasShip(i, j) && board.shipData[i][j].direction === 'vertical') {
-        const block = document.createElement('div');
-        block.classList.add('block');
-        block.classList.add('ship');
-        shipContainer.appendChild(block);
-        i++;
-      }
-      if (shipContainer.childElementCount !== 0) {
+
+        for (let time = 0; time < len; time++) {
+          const block = document.createElement('div');
+          block.classList.add('block');
+          block.classList.add('ship');
+          if (board.isHit(i + time, j)) block.classList.add('attacked');
+
+          shipContainer.appendChild(block);
+        }
+
         boardDOM.appendChild(shipContainer);
+        i += (len - 1);
       }
     }
   }
+}
+
+function renderShipContainer(board, boardDOM) {
+  renderHorizontalShips(board, boardDOM);
+  renderVerticalShips(board, boardDOM);
 }
 
 function renderPlayerBoard(player) {
@@ -170,5 +185,5 @@ function renderComputerBoard(player, computer) {
 }
 
 export {
-  renderComputerBoard, renderPlayerBoard, clearContainer as clearPage, showWinner, showInfo,
+  renderComputerBoard, renderPlayerBoard, showWinner, showInfo,
 };
