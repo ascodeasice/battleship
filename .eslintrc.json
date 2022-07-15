@@ -13,7 +13,9 @@
   "rules": {
     "no-param-reassign": "off",
     "no-plusplus": "off",
-    "no-continue": "off"
+    "no-continue": "off",
+    "no-use-before-define": "off",
+    "no-loop-func": "off"
   },
   "overrides": [
     {

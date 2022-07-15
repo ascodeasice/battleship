@@ -19,12 +19,38 @@ function cancelDefault(e) {
   return false;
 }
 
-function renderHorizontalShips(board, boardDOM) {
+function addShipContainerListener(player, board) {
+  const containers = document.getElementsByClassName('shipContainer');
+  for (let i = 0; i < containers.length; i++) {
+    containers[i].addEventListener('click', () => {
+      const coord = containers[i].firstChild.id.split(',');
+      const direct = board.shipData[coord[0]][coord[1]].direction;
+
+      board.removeShip(coord[0], coord[1]);
+      //  try to remove and place in differnet direction
+      //  if doesn't work, place back the original one.
+
+      if (direct === 'vertical') {
+        if (!board.placeShipHorizontally(coord[0], coord[1])) {
+          board.placeShipVertically(coord[0], coord[1]);
+        }
+      } else if (!board.placeShipVertically(coord[0], coord[1])) {
+        board.placeShipHorizontally(coord[0], coord[1]);
+      }
+
+      clearContainer();
+      renderPlayerBoard(player);
+    });
+  }
+}
+
+function renderHorizontalShips(player, board, boardDOM) {
   for (let i = 0; i < board.size; i++) {
     for (let j = 0; j < board.size; j++) {
       const shipContainer = document.createElement('div');
       shipContainer.setAttribute('draggable', 'true');
       shipContainer.classList.add('shipContainer');
+      shipContainer.setAttribute('id', `${i},${j}`);
 
       if (board.hasShip(i, j) && board.shipData[i][j].direction === 'horizontal') {
         const len = board.shipArr[board.shipData[i][j].shipIndex].length;
@@ -37,11 +63,40 @@ function renderHorizontalShips(board, boardDOM) {
           const block = document.createElement('div');
           block.classList.add('block');
           block.classList.add('ship');
+          block.setAttribute('id', `${i},${j + time}`);
           if (board.isHit(i, j + time)) block.classList.add('attacked');
+
+          // SECTION add drop event listener
+          block.addEventListener('drop', (e) => {
+            const id = e.dataTransfer.getData('text/plain');
+            const coordStr = id.split(',');
+            const coord = coordStr.map((item) => Number(item));
+
+            const data = player.board.shipData[coord[0]][coord[1]];
+            const ship = player.board.shipArr[data.shipIndex];
+
+            // TODO when placing ship from non-start position, need to -pos
+            player.board.removeShip(coord[0], coord[1]);
+
+            const selfCoord = e.target.id.split(',').map((item) => Number(item));
+
+            if (!player.board.placeShipHorizontally(ship.length, selfCoord[0], selfCoord[1])) {
+              player.board.placeShipHorizontally(ship.length, coord[0], coord[1]);
+            }
+
+            clearContainer();
+            renderPlayerBoard(player);
+          });
+
+          block.addEventListener('dragenter', cancelDefault);
+          block.addEventListener('dragover', cancelDefault);
 
           shipContainer.appendChild(block);
         }
 
+        shipContainer.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', e.target.id);// transfer id
+        });
         boardDOM.appendChild(shipContainer);
         j += (len - 1);
       }
@@ -49,12 +104,13 @@ function renderHorizontalShips(board, boardDOM) {
   }
 }
 
-function renderVerticalShips(board, boardDOM) {
+function renderVerticalShips(player, board, boardDOM) {
   for (let j = 0; j < board.size; j++) {
     for (let i = 0; i < board.size; i++) {
       const shipContainer = document.createElement('div');
       shipContainer.setAttribute('draggable', 'true');
       shipContainer.classList.add('shipContainer');
+      shipContainer.setAttribute('id', `${i},${j}`);
 
       if (board.hasShip(i, j) && board.shipData[i][j].direction === 'vertical') {
         const len = board.shipArr[board.shipData[i][j].shipIndex].length;
@@ -66,10 +122,40 @@ function renderVerticalShips(board, boardDOM) {
           const block = document.createElement('div');
           block.classList.add('block');
           block.classList.add('ship');
+          block.setAttribute('id', `${i + time},${j}`);
           if (board.isHit(i + time, j)) block.classList.add('attacked');
+
+          // SECTION add drop event listener
+          block.addEventListener('drop', (e) => {
+            const id = e.dataTransfer.getData('text/plain');
+            const coordStr = id.split(',');
+            const coord = coordStr.map((item) => Number(item));
+
+            const data = player.board.shipData[coord[0]][coord[1]];
+            const ship = player.board.shipArr[data.shipIndex];
+
+            // TODO when placing ship from non-start position, need to -pos
+            player.board.removeShip(coord[0], coord[1]);
+
+            const selfCoord = e.target.id.split(',').map((item) => Number(item));
+
+            if (!player.board.placeShipVertically(ship.length, selfCoord[0], selfCoord[1])) {
+              player.board.placeShipVertically(ship.length, coord[0], coord[1]);
+            }
+
+            clearContainer();
+            renderPlayerBoard(player);
+          });
+
+          block.addEventListener('dragenter', cancelDefault);
+          block.addEventListener('dragover', cancelDefault);
 
           shipContainer.appendChild(block);
         }
+
+        shipContainer.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', e.target.id);// transfer id
+        });
 
         boardDOM.appendChild(shipContainer);
         i += (len - 1);
@@ -78,9 +164,10 @@ function renderVerticalShips(board, boardDOM) {
   }
 }
 
-function renderShipContainer(board, boardDOM) {
-  renderHorizontalShips(board, boardDOM);
-  renderVerticalShips(board, boardDOM);
+function renderShipContainer(player, board, boardDOM) {
+  renderHorizontalShips(player, board, boardDOM);
+  renderVerticalShips(player, board, boardDOM);
+  addShipContainerListener(player, board);
 }
 
 function renderPlayerBoard(player) {
@@ -90,16 +177,43 @@ function renderPlayerBoard(player) {
   const boardDOM = document.createElement('div');
   boardDOM.classList.add('board');
 
-  renderShipContainer(player.board, boardDOM);
+  renderShipContainer(player, player.board, boardDOM);
 
-  for (let i = 0; i < player.board.size; i += 1) {
-    for (let j = 0; j < player.board.size; j += 1) {
-      if (player.board.hasShip(i, j)) {
-        continue;
-      }
+  for (let i = 0; i < player.board.size; i++) {
+    for (let j = 0; j < player.board.size; j++) {
       const block = document.createElement('div');
       block.setAttribute('id', `${i},${j}`);
       block.classList.add('block');
+
+      // SECTION add drag and drop event listener
+      block.addEventListener('drop', (e) => {
+        const id = e.dataTransfer.getData('text/plain');
+        const coordStr = id.split(',');
+        const coord = coordStr.map((item) => Number(item));
+
+        const data = player.board.shipData[coord[0]][coord[1]];
+        const ship = player.board.shipArr[data.shipIndex];
+
+        // TODO when placing ship from non-start position, need to -pos
+        player.board.removeShip(coord[0], coord[1]);
+
+        if (data.direction === 'vertical') {
+          if (!player.board.placeShipVertically(ship.length, i, j)) {
+            player.board.placeShipVertically(ship.length, coord[0], coord[1]);
+          }
+        } else if (!player.board.placeShipHorizontally(ship.length, i, j)) {
+          player.board.placeShipHorizontally(ship.length, coord[0], coord[1]);
+        }
+
+        clearContainer();
+        renderPlayerBoard(player);
+      });
+      block.addEventListener('dragenter', cancelDefault);
+      block.addEventListener('dragover', cancelDefault);
+
+      if (player.board.hasShip(i, j)) {
+        continue;
+      }
 
       if (player.board.isHit(i, j)) block.classList.add('attacked');
 
@@ -107,27 +221,9 @@ function renderPlayerBoard(player) {
       if (player.board.hasShip(i, j)) {
         block.classList.add('ship');
         block.setAttribute('draggable', 'true');
-        block.addEventListener('dragstart', (e) => {
-          e.dataTransfer.setData('text/plain', e.target.id);// transfer id
-        });
-      } else {
-        block.addEventListener('drop', (e) => {
-          const id = e.dataTransfer.getData('text/plain');
-          const coord = id.split(',');
-
-          player.board.shipData[i][j] = player.board.shipData[coord[0]][coord[1]];
-
-          player.board.shipData[coord[0]][coord[1]] = {
-            shipIndex: -1,
-            shipPos: -1,
-          };
-
-          block.classList.add('ship');
-          document.getElementById(id).classList.remove('ship');
-          renderShipContainer(player.board, boardDOM);
-        });
-        block.addEventListener('dragenter', cancelDefault);
-        block.addEventListener('dragover', cancelDefault);
+        // block.addEventListener('dragstart', (e) => {
+        //   e.dataTransfer.setData('text/plain', e.target.id);// transfer id
+        // });
       }
 
       boardDOM.appendChild(block);
