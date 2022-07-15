@@ -119,3 +119,55 @@ describe('isHit', () => {
     expect(() => board.isHit(-1, 0)).toThrow();
   });
 });
+
+describe('removeShip', () => {
+  it('Invalid', () => {
+    expect(() => board.removeShip(-1, 0)).toThrow();
+    expect(() => board.removeShip(0, -1)).toThrow();
+    expect(() => board.removeShip(len, 0)).toThrow();
+    expect(() => board.removeShip(0, len)).toThrow();
+  });
+
+  it('No ship', () => {
+    board.removeShip(0, 0);
+    for (let i = 0; i < len; i++) {
+      for (let j = 0; j < len; j++) {
+        expect(board.shipData[i][j]).toEqual({
+          shipIndex: -1,
+          shipPos: -1,
+          direction: 'none',
+        });
+      }
+    }
+  });
+
+  it('Horizontal', () => {
+    // try removing from every position
+    for (let pos = 0; pos < 3; pos++) {
+      board.placeShipHorizontally(3, 0, 0);
+      board.removeShip(0, pos);
+      for (let col = 0; col < 3; col++) {
+        expect(board.shipData[0][col]).toEqual({
+          shipIndex: -1,
+          shipPos: -1,
+          direction: 'none',
+        });
+      }
+    }
+  });
+
+  it('Vertical', () => {
+    // try removing from every position
+    for (let pos = 0; pos < 3; pos++) {
+      board.placeShipVertically(3, 0, 0);
+      board.removeShip(pos, 0);
+      for (let row = 0; row < 3; row++) {
+        expect(board.shipData[row][0]).toEqual({
+          shipIndex: -1,
+          shipPos: -1,
+          direction: 'none',
+        });
+      }
+    }
+  });
+});

@@ -124,6 +124,7 @@ function renderPlayerBoard(player) {
 
           block.classList.add('ship');
           document.getElementById(id).classList.remove('ship');
+          renderShipContainer(player.board, boardDOM);
         });
         block.addEventListener('dragenter', cancelDefault);
         block.addEventListener('dragover', cancelDefault);

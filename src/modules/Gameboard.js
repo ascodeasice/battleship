@@ -117,6 +117,40 @@ const Gameboard = (size) => {
     });
   };
 
+  const removeShip = (row, col) => {
+    if (row < 0 || row >= size || col < 0 || col >= size) {
+      throw new Error('Out of index(removeShip)');
+    }
+
+    if (shipData[row][col].shipIndex === -1) {
+      return;
+    }
+
+    const data = shipData[row][col];
+    const ship = shipArr[data.shipIndex];
+    const len = ship.length;
+    const pos = data.shipPos;
+    if (data.direction === 'vertical') {
+      const startRow = row - pos; // starts from row-pos
+      for (let i = 0; i < len; i++) {
+        shipData[startRow + i][col] = {
+          shipIndex: -1,
+          shipPos: -1,
+          direction: 'none',
+        };
+      }
+    } else {
+      const startCol = col - pos;
+      for (let i = 0; i < len; i++) {
+        shipData[row][startCol + i] = {
+          shipIndex: -1,
+          shipPos: -1,
+          direction: 'none',
+        };
+      }
+    }
+  };
+
   return {
     size,
     shipData,
@@ -128,6 +162,7 @@ const Gameboard = (size) => {
     placeShipVertically,
     placeShipHorizontally,
     placeShipsRandomly,
+    removeShip,
   };
 };
 
