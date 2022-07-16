@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-cycle
-import { addBlockListeners, addShipContainerListener, removeAllDragListeners } from './listener';
+import { addBlockListeners, addShipContainerListener, removeAllDragListeners } from './eventListener';
 
 const container = document.getElementById('container');
 const info = document.getElementById('infoText');
@@ -113,6 +113,7 @@ function renderPlayerBoard(player) {
   }
   const wrapper = document.createElement('div');
   wrapper.classList.add('boardWrapper');
+
   wrapper.appendChild(playerName);
   wrapper.appendChild(boardDOM);
   container.appendChild(wrapper);
@@ -167,6 +168,7 @@ function renderComputerBoard(player, computer) {
   }
   const wrapper = document.createElement('div');
   wrapper.classList.add('boardWrapper');
+
   wrapper.appendChild(playerName);
   wrapper.appendChild(boardDOM);
   container.appendChild(wrapper);

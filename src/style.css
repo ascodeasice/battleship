@@ -1,17 +1,46 @@
 :root {
-  --blockSize: 40px;
-  --gapSize: 10px;
+  --blockSize: 36px;
+  --gapSize: calc(var(--blockSize)/4);
   --boardSize: 10;
+  --buttonWidth: 8rem;
+  --gridColor: #4B6587;
+  --missColor: #889EAF;
+  --shipColor: #C8C6C6;
+  --hoverColor: #F0E5CF;
+  --titleFontSize: 2.5rem;
+  --textFontSize: 1.5rem;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+  font-size: var(--textFontSize);
 }
 
 [draggable="true"] {
-  /*
-   To prevent user selecting inside the drag source
-  */
+  /* To prevent user selecting inside the drag source */
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+  cursor: move;
+}
+
+button {
+  width: var(--buttonWidth);
+  height: calc(var(--buttonWidth)/3);
+  font-size: 1rem;
+  border-radius: 2rem;
+  background-color: var(--gridColor);
+  color: white;
+  border: none;
+  text-align: center;
+}
+
+button:hover {
+  background-color: lightblue;
 }
 
 .block {
@@ -29,18 +58,18 @@
 }
 
 .block.attacked {
-  background-color: blue;
+  background-color: var(--missColor);
 }
 
 .block.attacked.ship {
   background: url('./assets/cross.svg');
   background-repeat: no-repeat;
   background-size: var(--blockSize) var(--blockSize);
-  background-color: gray;
+  background-color: var(--shipColor);
 }
 
 .block.ship:not(.computer) {
-  background-color: gray;
+  background-color: var(--shipColor);
 }
 
 .block.hover {
@@ -54,8 +83,8 @@
   grid-template-columns: repeat(10, var(--blockSize));
   grid-auto-rows: var(--blockSize);
   gap: var(--gapSize);
-  border: var(--gapSize) solid black;
-  background-color: black;
+  border: var(--gapSize) solid var(--gridColor);
+  background-color: var(--gridColor);
 }
 
 .boardWrapper {
@@ -66,11 +95,11 @@
 #container {
   display: grid;
   grid-template-columns: repeat(2, min-content);
-  justify-content: space-evenly;
+  justify-content: center;
 }
 
 .shipContainer {
-  background-color: black;
+  background-color: var(--gridColor);
   display: grid;
   gap: var(--gapSize);
   grid-auto-columns: var(--blockSize);
@@ -80,10 +109,34 @@
   opacity: .5;
 }
 
-[draggable="true"] {
-  cursor: move;
-}
-
 #newGameBtn {
   display: none;
+}
+
+#title {
+  font-size: var(--titleFontSize);
+  font-family: 'Oswald', 'Roboto', sans-serif;
+  color: black;
+}
+
+/* #title:hover {
+  color: var(--gridColor);
+} */
+
+
+#githubImg {
+  width: calc(var(--titleFontSize)*4/5);
+  height: calc(var(--titleFontSize)*4/5);
+}
+
+#titleWrapper:hover {
+  width: fit-content;
+  /* Change to grid color */
+  filter: invert(38%) sepia(13%) saturate(1470%) hue-rotate(174deg) brightness(91%) contrast(83%);
+}
+
+#buttonWrapper {
+  margin-top: var(--gapSize);
+  display: flex;
+  justify-content: center;
 }
