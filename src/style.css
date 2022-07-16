@@ -43,6 +43,8 @@
   background-color: gray;
 }
 
+.block.hover {}
+
 .board {
   width: calc(var(--boardSize)*var(--boardSize));
   height: calc(var(--boardSize)*var(--boardSize));
