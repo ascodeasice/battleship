@@ -79,3 +79,7 @@
 .dragging {
   opacity: .5;
 }
+
+[draggable="true"] {
+  cursor: move;
+}
