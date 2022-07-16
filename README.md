@@ -12,8 +12,11 @@ The classic game ‘Battleship’, made with TDD in JavaScript.
 - Using ESLint for linting(Airbnb style)
 - Using HTML drag and drop API for placing ships on board
 # Result
-(The dragged ship isn't shown)
-![Gif of dragging ships](https://github.com/ascodeasice/battleship/blob/main/src/results/drag.gif)
+(The dragged ship isn't shown)</br>
+<p align="center">
+<img src="https://github.com/ascodeasice/battleship/blob/main/src/results/drag.gif" alt="Gif of dragging ships">
+</p>
+
 ![picture of result](https://github.com/ascodeasice/battleship/blob/main/src/results/game.png)
 # Link
 [Live Preview](https://ascodeasice.github.io/battleship/)
