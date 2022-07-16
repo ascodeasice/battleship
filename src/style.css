@@ -83,3 +83,7 @@
 [draggable="true"] {
   cursor: move;
 }
+
+#newGameBtn {
+  display: none;
+}

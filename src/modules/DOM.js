@@ -3,6 +3,7 @@ import { addBlockListeners, addShipContainerListener, removeAllDragListeners } f
 
 const container = document.getElementById('container');
 const info = document.getElementById('infoText');
+const newGameBtn = document.getElementById('newGameBtn');
 
 function clearContainer() {
   container.innerText = '';
@@ -143,11 +144,17 @@ function renderComputerBoard(player, computer) {
         }
         computer.board.receiveAttack(i, j);
         block.classList.add('attacked');
-        if (computer.lost()) showInfo(`${player.name} win!`);
+        if (computer.lost()) {
+          showInfo(`${player.name} win!`);
+          newGameBtn.style.display = 'block';
+        }
 
         // computer's move
         computer.randomAttack(player.board);
-        if (player.lost()) showInfo(`${computer.name} win!`);
+        if (player.lost()) {
+          showInfo(`${computer.name} win!`);
+          newGameBtn.style.display = 'block';
+        }
 
         // re-render to show blocks attacked
         clearContainer();
