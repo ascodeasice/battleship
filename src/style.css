@@ -43,7 +43,9 @@
   background-color: gray;
 }
 
-.block.hover {}
+.block.hover {
+  background-color: lightgreen !important;
+}
 
 .board {
   width: calc(var(--boardSize)*var(--boardSize));

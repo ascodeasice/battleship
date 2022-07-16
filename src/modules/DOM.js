@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-cycle
-import { addDropListeners } from './event';
+import { addDropListeners, addDragOverListeners } from './event';
 
 const container = document.getElementById('container');
 const info = document.getElementById('infoText');
@@ -178,6 +178,7 @@ function renderPlayerBoard(player) {
   container.appendChild(wrapper);
   addShipContainerListener(player, player.board);
   addDropListeners(player);
+  addDragOverListeners();
 }
 
 function renderComputerBoard(player, computer) {

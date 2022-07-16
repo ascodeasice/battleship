@@ -42,15 +42,19 @@ function addDropListeners(player) {
   }
 }
 
-// function addDropOverListeners() {
-//   const blocks = document.querySelectorAll('.block');
+function addDragOverListeners() {
+  const blocks = document.querySelectorAll('.block');
 
-//   for (let i = 0; i < blocks.length; i++) {
-//     blocks[i].addEventListener('dropover', () => {
+  for (let i = 0; i < blocks.length; i++) {
+    blocks[i].addEventListener('dragover', () => {
+      blocks[i].classList.add('hover');
+    });
 
-//     });
-//   }
-// }
+    blocks[i].addEventListener('dragleave', () => {
+      blocks[i].classList.remove('hover');
+    });
+  }
+}
 
 // eslint-disable-next-line import/prefer-default-export
-export { addDropListeners };
+export { addDropListeners, addDragOverListeners };
