@@ -42,5 +42,15 @@ function addDropListeners(player) {
   }
 }
 
+// function addDropOverListeners() {
+//   const blocks = document.querySelectorAll('.block');
+
+//   for (let i = 0; i < blocks.length; i++) {
+//     blocks[i].addEventListener('dropover', () => {
+
+//     });
+//   }
+// }
+
 // eslint-disable-next-line import/prefer-default-export
 export { addDropListeners };

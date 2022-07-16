@@ -12,10 +12,6 @@ function showInfo(text) {
   info.innerText = text;
 }
 
-function showWinner(player) {
-  showInfo(`${player.name} won!`);
-}
-
 function addShipContainerListener(player, board) {
   const containers = document.querySelectorAll('.shipContainer');
   for (let i = 0; i < containers.length; i++) {
@@ -77,7 +73,12 @@ function renderHorizontalShips(player, board, boardDOM) {
         }
 
         shipContainer.addEventListener('dragstart', (e) => {
+          shipContainer.classList.add('dragging');
           e.dataTransfer.setData('text/plain', `${e.target.id},${pos}`);// transfer id
+        });
+
+        shipContainer.addEventListener('dragend', () => {
+          shipContainer.classList.remove('dragging');
         });
 
         boardDOM.appendChild(shipContainer);
@@ -120,7 +121,12 @@ function renderVerticalShips(player, board, boardDOM) {
         }
 
         shipContainer.addEventListener('dragstart', (e) => {
+          shipContainer.classList.add('dragging');
           e.dataTransfer.setData('text/plain', `${e.target.id},${pos}`);// transfer id
+        });
+
+        shipContainer.addEventListener('dragend', () => {
+          shipContainer.classList.remove('dragging');
         });
 
         boardDOM.appendChild(shipContainer);
@@ -197,11 +203,11 @@ function renderComputerBoard(player, computer) {
         }
         computer.board.receiveAttack(i, j);
         block.classList.add('attacked');
-        if (computer.lost()) showWinner(player);
+        if (computer.lost()) showInfo(`${player.name} win!`);
 
         // computer's move
         computer.randomAttack(player.board);
-        if (player.lost()) showWinner(computer);
+        if (player.lost()) showInfo(`${computer.name} win!`);
 
         // re-render to show blocks attacked
         clearContainer();
@@ -220,5 +226,5 @@ function renderComputerBoard(player, computer) {
 }
 
 export {
-  renderComputerBoard, renderPlayerBoard, showWinner, showInfo, clearContainer,
+  renderComputerBoard, renderPlayerBoard, showInfo, clearContainer,
 };

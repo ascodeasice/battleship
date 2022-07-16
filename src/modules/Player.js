@@ -40,7 +40,18 @@ const Player = (name, size) => {
     if (board.shipArr.length === 0) {
       throw new Error('No ship in shipArr');
     }
-    return board.shipArr.every((ship) => ship.isSunk());
+
+    // every ship is sunk
+    for (let i = 0; i < board.size; i++) {
+      for (let j = 0; j < board.size; j++) {
+        if (board.shipData[i][j].shipIndex !== -1) {
+          if (!board.shipArr[board.shipData[i][j].shipIndex].isSunk()) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   };
 
   return {

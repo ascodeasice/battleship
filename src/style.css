@@ -73,3 +73,7 @@
   gap: var(--gapSize);
   grid-auto-columns: var(--blockSize);
 }
+
+.dragging {
+  opacity: .5;
+}
