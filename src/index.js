@@ -6,10 +6,12 @@ import {
   clearContainer,
 } from './modules/DOM';
 import Player from './modules/Player';
+import Github from './assets/github.svg';
 
 const startBtn = document.getElementById('startBtn');
 const newGameBtn = document.getElementById('newGameBtn');
 const container = document.getElementById('container');
+const githubImg = document.getElementById('githubImg');
 
 let player = Player('You', 10);
 let computer = Player('Computer', 10);
@@ -37,4 +39,5 @@ startBtn.addEventListener('click', () => {
 
 newGameBtn.addEventListener('click', startNewGame);
 
+githubImg.src = Github;
 startNewGame();
