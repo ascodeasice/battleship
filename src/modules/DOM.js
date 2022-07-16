@@ -20,22 +20,23 @@ function cancelDefault(e) {
 }
 
 function addShipContainerListener(player, board) {
-  const containers = document.getElementsByClassName('shipContainer');
+  const containers = document.querySelectorAll('.shipContainer');
   for (let i = 0; i < containers.length; i++) {
     containers[i].addEventListener('click', () => {
-      const coord = containers[i].firstChild.id.split(',');
-      const direct = board.shipData[coord[0]][coord[1]].direction;
+      const coord = containers[i].id.split(',').map((item) => Number(item));
+      const data = board.shipData[coord[0]][coord[1]];
+      const ship = board.shipArr[data.shipIndex];
 
       board.removeShip(coord[0], coord[1]);
       //  try to remove and place in differnet direction
       //  if doesn't work, place back the original one.
 
-      if (direct === 'vertical') {
-        if (!board.placeShipHorizontally(coord[0], coord[1])) {
-          board.placeShipVertically(coord[0], coord[1]);
+      if (data.direction === 'vertical') {
+        if (!board.placeShipHorizontally(ship.length, coord[0], coord[1])) {
+          board.placeShipVertically(ship.length, coord[0], coord[1]);
         }
-      } else if (!board.placeShipVertically(coord[0], coord[1])) {
-        board.placeShipHorizontally(coord[0], coord[1]);
+      } else if (!board.placeShipVertically(ship.length, coord[0], coord[1])) {
+        board.placeShipHorizontally(ship.length, coord[0], coord[1]);
       }
 
       clearContainer();
@@ -64,6 +65,7 @@ function renderHorizontalShips(player, board, boardDOM) {
           block.classList.add('block');
           block.classList.add('ship');
           block.setAttribute('id', `${i},${j + time}`);
+
           if (board.isHit(i, j + time)) block.classList.add('attacked');
 
           // SECTION add drop event listener
@@ -80,7 +82,11 @@ function renderHorizontalShips(player, board, boardDOM) {
 
             const selfCoord = e.target.id.split(',').map((item) => Number(item));
 
-            if (!player.board.placeShipHorizontally(ship.length, selfCoord[0], selfCoord[1])) {
+            if (!player.board.placeShipHorizontally(
+              ship.length,
+              selfCoord[0],
+              selfCoord[1] - coord[2],
+            )) {
               player.board.placeShipHorizontally(ship.length, coord[0], coord[1]);
             }
 
@@ -94,9 +100,18 @@ function renderHorizontalShips(player, board, boardDOM) {
           shipContainer.appendChild(block);
         }
 
+        const children = shipContainer.childNodes;
+        let pos = 0; // position of block
+        for (let position = 0; position < children.length; position++) {
+          children[position].addEventListener('mouseenter', () => {
+            pos = position;
+          });
+        }
+
         shipContainer.addEventListener('dragstart', (e) => {
-          e.dataTransfer.setData('text/plain', e.target.id);// transfer id
+          e.dataTransfer.setData('text/plain', `${e.target.id},${pos}`);// transfer id
         });
+
         boardDOM.appendChild(shipContainer);
         j += (len - 1);
       }
@@ -130,6 +145,7 @@ function renderVerticalShips(player, board, boardDOM) {
             const id = e.dataTransfer.getData('text/plain');
             const coordStr = id.split(',');
             const coord = coordStr.map((item) => Number(item));
+            // NOTE coord[2] is position of block
 
             const data = player.board.shipData[coord[0]][coord[1]];
             const ship = player.board.shipArr[data.shipIndex];
@@ -139,7 +155,11 @@ function renderVerticalShips(player, board, boardDOM) {
 
             const selfCoord = e.target.id.split(',').map((item) => Number(item));
 
-            if (!player.board.placeShipVertically(ship.length, selfCoord[0], selfCoord[1])) {
+            if (!player.board.placeShipVertically(
+              ship.length,
+              selfCoord[0] - coord[2],
+              selfCoord[1],
+            )) {
               player.board.placeShipVertically(ship.length, coord[0], coord[1]);
             }
 
@@ -153,8 +173,16 @@ function renderVerticalShips(player, board, boardDOM) {
           shipContainer.appendChild(block);
         }
 
+        const children = shipContainer.childNodes;
+        let pos = 0; // position of block
+        for (let position = 0; position < children.length; position++) {
+          children[position].addEventListener('mouseenter', () => {
+            pos = position;
+          });
+        }
+
         shipContainer.addEventListener('dragstart', (e) => {
-          e.dataTransfer.setData('text/plain', e.target.id);// transfer id
+          e.dataTransfer.setData('text/plain', `${e.target.id},${pos}`);// transfer id
         });
 
         boardDOM.appendChild(shipContainer);
@@ -167,7 +195,6 @@ function renderVerticalShips(player, board, boardDOM) {
 function renderShipContainer(player, board, boardDOM) {
   renderHorizontalShips(player, board, boardDOM);
   renderVerticalShips(player, board, boardDOM);
-  addShipContainerListener(player, board);
 }
 
 function renderPlayerBoard(player) {
@@ -198,10 +225,10 @@ function renderPlayerBoard(player) {
         player.board.removeShip(coord[0], coord[1]);
 
         if (data.direction === 'vertical') {
-          if (!player.board.placeShipVertically(ship.length, i, j)) {
+          if (!player.board.placeShipVertically(ship.length, i - coord[2], j)) {
             player.board.placeShipVertically(ship.length, coord[0], coord[1]);
           }
-        } else if (!player.board.placeShipHorizontally(ship.length, i, j)) {
+        } else if (!player.board.placeShipHorizontally(ship.length, i, j - coord[2])) {
           player.board.placeShipHorizontally(ship.length, coord[0], coord[1]);
         }
 
@@ -221,9 +248,6 @@ function renderPlayerBoard(player) {
       if (player.board.hasShip(i, j)) {
         block.classList.add('ship');
         block.setAttribute('draggable', 'true');
-        // block.addEventListener('dragstart', (e) => {
-        //   e.dataTransfer.setData('text/plain', e.target.id);// transfer id
-        // });
       }
 
       boardDOM.appendChild(block);
@@ -234,6 +258,7 @@ function renderPlayerBoard(player) {
   wrapper.appendChild(playerName);
   wrapper.appendChild(boardDOM);
   container.appendChild(wrapper);
+  addShipContainerListener(player, player.board);
 }
 
 function renderComputerBoard(player, computer) {
