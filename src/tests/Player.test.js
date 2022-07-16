@@ -61,3 +61,14 @@ describe('lost', () => {
     expect(() => player.lost()).toThrow();
   });
 });
+
+describe('AIAttack', () => {
+  it('try around attacked ship', () => {
+    player.board.placeShipHorizontally(1, 0, 1);
+    computer.attack(player.board, 0, 1);
+    computer.AIAttack(player.board);
+    expect(player.board.isHit(0, 0)
+      || player.board.isHit(0, 2)
+      || player.board.isHit(1, 1)).toBe(true);
+  });
+});

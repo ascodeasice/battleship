@@ -150,7 +150,7 @@ function renderComputerBoard(player, computer) {
         }
 
         // computer's move
-        computer.randomAttack(player.board);
+        computer.AIAttack(player.board);
         if (player.lost()) {
           showInfo(`${computer.name} win!`);
           newGameBtn.style.display = 'block';

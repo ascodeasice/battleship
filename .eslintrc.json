@@ -15,7 +15,8 @@
     "no-plusplus": "off",
     "no-continue": "off",
     "no-use-before-define": "off",
-    "no-loop-func": "off"
+    "no-useless-return": "off",
+    "no-restricted-syntax": "off"
   },
   "overrides": [
     {

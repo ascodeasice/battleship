@@ -171,3 +171,15 @@ describe('removeShip', () => {
     }
   });
 });
+
+describe('Out of index', () => {
+  it('Is not', () => {
+    expect(board.outOfIndex(1, 2)).toBe(false);
+  });
+  it('Is', () => {
+    expect(board.outOfIndex(-1, 0)).toBe(true);
+    expect(board.outOfIndex(0, -1)).toBe(true);
+    expect(board.outOfIndex(5, 0)).toBe(true);
+    expect(board.outOfIndex(0, 5)).toBe(true);
+  });
+});

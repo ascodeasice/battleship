@@ -151,6 +151,8 @@ const Gameboard = (size) => {
     }
   };
 
+  const outOfIndex = (i, j) => i < 0 || i >= size || j < 0 || j >= size;
+
   return {
     size,
     shipData,
@@ -163,6 +165,7 @@ const Gameboard = (size) => {
     placeShipHorizontally,
     placeShipsRandomly,
     removeShip,
+    outOfIndex,
   };
 };
 

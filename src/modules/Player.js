@@ -54,12 +54,35 @@ const Player = (name, size) => {
     return true;
   };
 
+  // if there are surrounding ships been hit, try hit around
+  const AIAttack = (enemyBoard) => {
+    const directions = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+    for (let i = 0; i < enemyBoard.size; i++) {
+      for (let j = 0; j < enemyBoard.size; j++) {
+        if (enemyBoard.isHit(i, j) && enemyBoard.hasShip(i, j)) {
+          for (const direct of directions) {
+            const coord = [i + direct[0], j + direct[1]];
+            if (enemyBoard.outOfIndex(coord[0], coord[1])
+              || enemyBoard.isHit(coord[0], coord[1])) {
+              continue;
+            } else {
+              attack(enemyBoard, coord[0], coord[1]);
+              return;
+            }
+          }
+        }
+      }
+    }
+    randomAttack(enemyBoard);
+  };
+
   return {
     name,
     board,
     attack,
     randomAttack,
     lost,
+    AIAttack,
   };
 };
 

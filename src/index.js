@@ -20,9 +20,10 @@ function startNewGame() {
   player.board.placeShipsRandomly(player.board);
   computer.board.placeShipsRandomly(computer.board);
 
-  showInfo('Place your ship by drag and drop.\n click to change direction');
+  showInfo('Drag and drop to place your ship\n click to change direction.');
   renderPlayerBoard(player);
   newGameBtn.style.display = 'none';
+  startBtn.style.display = 'block';
 }
 
 startBtn.addEventListener('click', () => {
